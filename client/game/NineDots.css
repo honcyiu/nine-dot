@@ -1,0 +1,7 @@
+.container {
+  text-align: center;
+  width: 700px;
+  height: 700px;
+  outline-style: dashed;
+  outline-color: aqua;
+}
