@@ -2,11 +2,12 @@ import React from "react";
 import NineDots from "./NineDots";
 
 export default class TaskResponse extends React.Component {
-  handleChange = num => {
+
+  handleCallback = (num) => {
     const { player } = this.props;
-    const value = Math.round(num * 100) / 100;
-    player.round.set("value", value);
-  };
+    player.round.set("value", num);
+    console.log(num)
+  }
 
   handleSubmit = event => {
     event.preventDefault();
@@ -25,12 +26,8 @@ export default class TaskResponse extends React.Component {
   }
 
   renderDots() {
-    const { player } = this.props;
     return (
-      <div>
-        <NineDots />
-      </div>
-
+      <NineDots parentCallback={this.handleCallback} />
     );
   }
 
@@ -46,7 +43,6 @@ export default class TaskResponse extends React.Component {
       <div className="task-response">
         <form onSubmit={this.handleSubmit}>
           {this.renderDots()}
-
           <button type="submit">Submit</button>
         </form>
       </div>

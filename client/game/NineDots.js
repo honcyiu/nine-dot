@@ -40,38 +40,16 @@ function collision(circle, line) {
     return false;
 }
 
-// function to create 9 dots
-function createCircles(lines) {
-    let circleSet = []
-    // render set of 9 dots
-    for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
-            const x = 200 + 150 * i
-            const y = 200 + 150 * j
-            const d = 60
-            let circle = generator.circle(x, y, d, { roughness: 0, fill: 'red' })
-            const circleObj = { centerX: x, centerY: y, diameter: d }
-            if (lines.length > 0) {
-                for (let l = 0; l < lines.length; l++) {
-                    // if a dot collides with any drawn line, make the dot green
-                    if (collision(circleObj, lines[l])) {
-                        circle = generator.circle(x, y, d, { roughness: 0, fill: 'green' })
-                        break
-                    }
-                }
-            }
-            circleSet.push(circle)
-        }
-    }
-    return circleSet
-}
-
 const NineDots = useHooks(props => {
+
+
     const [lines, setLines] = useState([])
     const [drawing, setDrawing] = useState(false)
     const [first, setFirst] = useState(true)
     const [start, setStart] = useState([0, 0])
     const [length, setLength] = useState(4)
+    const [complete, setComplete] = useState(0)
+
     let circleSet = []
     // initialize set of 9 dots in red
     for (let i = 0; i < 3; i++) {
@@ -84,6 +62,40 @@ const NineDots = useHooks(props => {
         }
     }
     const [circles, setCircles] = useState(circleSet)
+
+    // function to create 9 dots
+    function createCircles(lines) {
+        let green = 0
+        let circleSet = []
+        // render set of 9 dots
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                const x = 200 + 150 * i
+                const y = 200 + 150 * j
+                const d = 60
+                let circle = generator.circle(x, y, d, { roughness: 0, fill: 'red' })
+                const circleObj = { centerX: x, centerY: y, diameter: d }
+                if (lines.length > 0) {
+                    for (let l = 0; l < lines.length; l++) {
+                        // if a dot collides with any drawn line, make the dot green
+                        if (collision(circleObj, lines[l])) {
+                            circle = generator.circle(x, y, d, { roughness: 0, fill: 'green' })
+                            green++;
+                            break
+                        }
+                    }
+                }
+                circleSet.push(circle)
+            }
+        }
+        if (green == 9) {
+            setComplete(1)
+        }
+        else {
+            setComplete(0)
+        }
+        return circleSet
+    }
 
     useLayoutEffect(() => {
         const canvas = document.getElementById('canvas')
@@ -136,7 +148,12 @@ const NineDots = useHooks(props => {
         setLines([])
         setLength(4)
         setFirst(true)
-        setDone(false)
+    }
+
+    const submitResult = (e) => {
+        console.log(props)
+        props.parentCallback(complete);
+        e.preventDefault();
     }
 
     return (
@@ -149,7 +166,8 @@ const NineDots = useHooks(props => {
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}>
             </canvas>
-            <button onClick={restartGame}>Restart</button>
+            <button type="button" onClick={restartGame}>Restart</button>
+            <button type="button" onClick={submitResult}>Done!</button>
         </div >
     );
 })

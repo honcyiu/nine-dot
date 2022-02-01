@@ -1,7 +1,7 @@
 .container {
   text-align: center;
   width: 700px;
-  height: 700px;
+  height: 800px;
   outline-style: dashed;
   outline-color: aqua;
 }
