@@ -10,17 +10,35 @@ import "./callbacks.js";
 // rounds and stages (with get/set methods), that will be able to use later in
 // the game.
 Empirica.gameInit(game => {
+  const nodes = [];
+  for (let i = 0; i <= game.players.length; i++) {
+    nodes.push(i);
+  }
+
   game.players.forEach((player, i) => {
     player.set("avatar", `/avatars/jdenticon/${player._id}`);
     player.set("score", 0);
+    player.set("nodeId", i);
+
+    // Assign each node as a neighbor
+    const networkNeighbors = nodes.filter(node => node !== i);
+    player.set("neighbors", networkNeighbors);
   });
+
 
   _.times(game.treatment.numRounds, i => {
     const round = game.addRound();
     round.addStage({
       name: "response",
       displayName: "Response",
-      durationInSeconds: 120
+      durationInSeconds: game.treatment.stageLength
     });
+
+    round.addStage({
+      name: "social",
+      displayName: "Social Information",
+      durationInSeconds: game.treatment.stageLength
+    });
+
   });
 });
