@@ -1,4 +1,5 @@
 import React from "react";
+import PeerLines from "./PeerLines"
 
 export default class SocialExposure extends React.Component {
   handleNext = event => {
@@ -8,11 +9,26 @@ export default class SocialExposure extends React.Component {
 
   renderSocialInteraction(otherPlayer) {
     // Get the value or return NA if no value was entered
-    const value = otherPlayer.round.get("value") ?? "NA";
+    let value = otherPlayer.round.get("value") ?? "Not attempted";
+    if (value == 1) {
+      value = "Succeeded"
+    }
+    else if (value == 0) {
+      value = "Failed"
+    }
+
+    let lines = otherPlayer.round.get("lines") ?? "NA";
     return (
-      <div className="alter" key={otherPlayer._id}>
-        <img src={otherPlayer.get("avatar")} className="profile-avatar" />
-        Guess: {value}
+      <div>
+        <div className="alter" key={otherPlayer._id}>
+          <img src={otherPlayer.get("avatar")} className="profile-avatar" />
+        </div>
+        <p>Result: {value}</p>
+        {
+          (lines.length > 0 && lines[0].roughElement) ?
+            (<PeerLines lines={lines} />) :
+            <p>No lines were drawn</p>
+        }
       </div>
     );
   }

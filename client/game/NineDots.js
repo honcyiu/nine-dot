@@ -41,8 +41,6 @@ function collision(circle, line) {
 }
 
 const NineDots = useHooks(props => {
-
-
     const [lines, setLines] = useState([])
     const [drawing, setDrawing] = useState(false)
     const [first, setFirst] = useState(true)
@@ -150,9 +148,10 @@ const NineDots = useHooks(props => {
         setFirst(true)
     }
 
+    // upon "submit", send results back to class response component
     const submitResult = (e) => {
-        console.log(props)
-        props.parentCallback(complete);
+        const results = { complete: complete, lines: lines }
+        props.parentCallback(results);
         e.preventDefault();
     }
 

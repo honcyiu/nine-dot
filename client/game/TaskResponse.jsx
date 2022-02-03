@@ -3,10 +3,10 @@ import NineDots from "./NineDots";
 
 export default class TaskResponse extends React.Component {
 
-  handleCallback = (num) => {
+  handleCallback = (result) => {
     const { player } = this.props;
-    player.round.set("value", num);
-    console.log(num)
+    player.round.set("value", result.complete);
+    player.round.set("lines", result.lines);
   }
 
   handleSubmit = event => {
