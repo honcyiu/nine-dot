@@ -55,8 +55,9 @@ export default class SocialExposure extends React.Component {
       player.get("neighbors").includes(p.get("nodeId"))
     );
 
+    // if there are no other players, there are no social rounds to the game
     if (otherPlayers.length === 0) {
-      return null;
+      this.props.player.stage.submit();
     }
 
     return (
@@ -69,6 +70,7 @@ export default class SocialExposure extends React.Component {
               : <strong>There is one other player:</strong>
           }
         </p>
+
         {otherPlayers.map(p => this.renderSocialInteraction(p))}
         <button type="submit" onClick={this.handleNext}>Next Round</button>
       </div>
