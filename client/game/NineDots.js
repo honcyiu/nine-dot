@@ -41,13 +41,6 @@ function collision(circle, line) {
 }
 
 const NineDots = useHooks(props => {
-    const [lines, setLines] = useState([])
-    const [drawing, setDrawing] = useState(false)
-    const [first, setFirst] = useState(true)
-    const [start, setStart] = useState([0, 0])
-    const [length, setLength] = useState(4)
-    const [complete, setComplete] = useState(0)
-
     let circleSet = []
     // initialize set of 9 dots in red
     for (let i = 0; i < 3; i++) {
@@ -56,44 +49,44 @@ const NineDots = useHooks(props => {
             const y = 200 + 150 * j
             const d = 60
             let circle = generator.circle(x, y, d, { roughness: 0, fill: 'red' })
-            circleSet.push(circle)
+            let circleObj = { centerX: x, centerY: y, diameter: d, roughElement: circle }
+            circleSet.push(circleObj)
         }
     }
-    const [circles, setCircles] = useState(circleSet)
 
     // function to create 9 dots
-    function createCircles(lines) {
-        let green = 0
-        let circleSet = []
+    function createCircles(circles, lines) {
+        // record number of green dots
+        let hits = 0
         // render set of 9 dots
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                const x = 200 + 150 * i
-                const y = 200 + 150 * j
-                const d = 60
-                let circle = generator.circle(x, y, d, { roughness: 0, fill: 'red' })
-                const circleObj = { centerX: x, centerY: y, diameter: d }
-                if (lines.length > 0) {
-                    for (let l = 0; l < lines.length; l++) {
-                        // if a dot collides with any drawn line, make the dot green
-                        if (collision(circleObj, lines[l])) {
-                            circle = generator.circle(x, y, d, { roughness: 0, fill: 'green' })
-                            green++;
-                            break
-                        }
+        for (let i = 0; i < circles.length; i++) {
+            if (lines.length > 0) {
+                for (let l = 0; l < lines.length; l++) {
+                    console.log(circles)
+                    // if a dot collides with any drawn line, make the dot green
+                    if (collision(circles[i], lines[l])) {
+                        console.log("cross")
+                        circles[i].roughElement.options.fill = "green"
+                        hits++;
+                        break
                     }
+                    circles[i].roughElement.options.fill = "red"
                 }
-                circleSet.push(circle)
             }
+            else { circles[i].roughElement.options.fill = "red" }
         }
-        if (green == 9) {
-            setComplete(1)
-        }
-        else {
-            setComplete(0)
-        }
-        return circleSet
+        if (hits == circles.length) { setComplete(1) }
+        return circles
     }
+
+    // react hooks to set relevants states
+    const [circles, setCircles] = useState(circleSet)
+    const [lines, setLines] = useState([])
+    const [drawing, setDrawing] = useState(false)
+    const [first, setFirst] = useState(true)
+    const [start, setStart] = useState([0, 0])
+    const [length, setLength] = useState(4)
+    const [complete, setComplete] = useState(0)
 
     useLayoutEffect(() => {
         const canvas = document.getElementById('canvas')
@@ -102,7 +95,7 @@ const NineDots = useHooks(props => {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         // render lines and set of 9 dots
         lines.forEach(({ roughElement }) => roughCanvas.draw(roughElement), [lines])
-        circles.forEach(circle => roughCanvas.draw(circle))
+        circles.forEach(({ roughElement }) => roughCanvas.draw(roughElement))
     })
 
     const handleMouseDown = (e) => {
@@ -133,16 +126,16 @@ const NineDots = useHooks(props => {
         linesCopy[index] = updatedLine
         setStart([clientX, clientY])
         setLines(linesCopy)
-        const circleSet = createCircles(lines)
-        setCircles(circleSet)
+        const updateCircles = createCircles(circleSet, lines)
+        setCircles(updateCircles)
     }
     const handleMouseUp = () => {
         setDrawing(false)
     }
 
     const restartGame = () => {
-        const circleSet = createCircles([])
-        setCircles(circleSet)
+        const updateCircles = createCircles(circleSet, [])
+        setCircles(updateCircles)
         setLines([])
         setLength(4)
         setFirst(true)
