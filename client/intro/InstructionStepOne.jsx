@@ -11,7 +11,7 @@ export default class InstructionStepOne extends React.Component {
         <div className="instructions">
           <h1> Instructions 1 </h1>
           <p>
-            (Placeholder for instructions for stage 1)
+            (Placeholder for instructions for all modes)
           </p>
 
           <p>

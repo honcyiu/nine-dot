@@ -8,6 +8,7 @@ patterns = [nonDotTurnPattern, dotTurnPattern, nineDotPattern]
 
 export default class TaskResponse extends React.Component {
   handleCallback = (result) => {
+    const { player } = this.props;
     player.round.set("value", result.complete);
     player.round.set("lines", result.lines);
   }
