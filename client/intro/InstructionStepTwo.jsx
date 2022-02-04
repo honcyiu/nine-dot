@@ -10,7 +10,7 @@ export default class InstructionStepTwo extends React.Component {
         <div className="instructions">
           <h1> Instructions 2 </h1>
           <p>
-            (Placeholder for instructions for stage 2)
+            (Placeholder for instructions for multiplayer mode)
           </p>
 
           <p>

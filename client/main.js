@@ -52,9 +52,6 @@ Empirica.exitSteps((game, player) => {
       player.exitStatus !== "finished" &&
       player.exitReason !== "playerQuit")
   ) {
-    console.log(game);
-    console.log(player);
-    console.log(player.exitStatus);
     return [Sorry];
   }
   return [ExitSurvey, Thanks];

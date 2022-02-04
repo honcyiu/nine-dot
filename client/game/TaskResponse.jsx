@@ -1,10 +1,13 @@
 import React from "react";
 import NineDots from "./NineDots";
+import nineDotPattern from "./Patterns/nine-dot"
+import dotTurnPattern from "./Patterns/dot-turn"
+import nonDotTurnPattern from "./Patterns/non-dot-turn"
+
+patterns = [nonDotTurnPattern, dotTurnPattern, nineDotPattern]
 
 export default class TaskResponse extends React.Component {
-
   handleCallback = (result) => {
-    const { player } = this.props;
     player.round.set("value", result.complete);
     player.round.set("lines", result.lines);
   }
@@ -26,8 +29,9 @@ export default class TaskResponse extends React.Component {
   }
 
   renderDots() {
+    const { round } = this.props;
     return (
-      <NineDots parentCallback={this.handleCallback} />
+      <NineDots parentCallback={this.handleCallback} pattern={patterns[round.index]} />
     );
   }
 

@@ -3,7 +3,7 @@ import React from "react";
 import { Centered } from "meteor/empirica:core";
 
 export default class Quiz extends React.Component {
-  state = { sum: "", horse: "" };
+  state = { first: "", confirm: "" };
 
   handleChange = event => {
     const el = event.currentTarget;
@@ -13,7 +13,7 @@ export default class Quiz extends React.Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    if (this.state.sum !== "4" || this.state.horse !== "white") {
+    if (this.state.first !== "y" || this.state.confirm !== "y") {
       alert("Incorrect! Read the instructions, and please try again.");
     } else {
       this.props.onNext();
@@ -22,37 +22,37 @@ export default class Quiz extends React.Component {
 
   render() {
     const { hasPrev, hasNext, onNext, onPrev } = this.props;
-    const { sum, horse } = this.state;
+    const { first, confirm } = this.state;
     return (
       <Centered>
         <div className="quiz">
-          <h1> Quiz </h1>
+          <h1> (Placeholder for Quiz) </h1>
           <form onSubmit={this.handleSubmit}>
             <p>
-              <label htmlFor="sum">What is 2+2?</label>
+              <label htmlFor="first">Are you ready to start the game (y/n)?</label>
               <input
                 type="text"
                 dir="auto"
-                id="sum"
-                name="sum"
-                placeholder="e.g. 3"
-                value={sum}
+                id="first"
+                name="first"
+                placeholder="e.g. y"
+                value={first}
                 onChange={this.handleChange}
                 autoComplete="off"
                 required
               />
             </p>
             <p>
-              <label htmlFor="horse">
-                What color was Napoleon's white horse?
+              <label htmlFor="confirm">
+                Are you sure (y/n)?
               </label>
               <input
                 type="text"
                 dir="auto"
-                id="horse"
-                name="horse"
-                placeholder="e.g. brown"
-                value={horse}
+                id="confirm"
+                name="confirm"
+                placeholder="e.g. y"
+                value={confirm}
                 onChange={this.handleChange}
                 autoComplete="off"
                 required

@@ -41,19 +41,6 @@ function collision(circle, line) {
 }
 
 const NineDots = useHooks(props => {
-    let circleSet = []
-    // initialize set of 9 dots in red
-    for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
-            const x = 200 + 150 * i
-            const y = 200 + 150 * j
-            const d = 60
-            let circle = generator.circle(x, y, d, { roughness: 0, fill: 'red' })
-            let circleObj = { centerX: x, centerY: y, diameter: d, roughElement: circle }
-            circleSet.push(circleObj)
-        }
-    }
-
     // function to create 9 dots
     function createCircles(circles, lines) {
         // record number of green dots
@@ -80,12 +67,12 @@ const NineDots = useHooks(props => {
     }
 
     // react hooks to set relevants states
-    const [circles, setCircles] = useState(circleSet)
+    const [circles, setCircles] = useState(props.pattern.pattern)
     const [lines, setLines] = useState([])
     const [drawing, setDrawing] = useState(false)
     const [first, setFirst] = useState(true)
     const [start, setStart] = useState([0, 0])
-    const [length, setLength] = useState(4)
+    const [length, setLength] = useState(props.pattern.length)
     const [complete, setComplete] = useState(0)
 
     useLayoutEffect(() => {
@@ -95,7 +82,7 @@ const NineDots = useHooks(props => {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         // render lines and set of 9 dots
         lines.forEach(({ roughElement }) => roughCanvas.draw(roughElement), [lines])
-        circles.forEach(({ roughElement }) => roughCanvas.draw(roughElement))
+        circles.forEach(({ roughElement }) => roughCanvas.draw(roughElement), [circles])
     })
 
     const handleMouseDown = (e) => {
@@ -126,7 +113,7 @@ const NineDots = useHooks(props => {
         linesCopy[index] = updatedLine
         setStart([clientX, clientY])
         setLines(linesCopy)
-        const updateCircles = createCircles(circleSet, lines)
+        const updateCircles = createCircles(circles, lines)
         setCircles(updateCircles)
     }
     const handleMouseUp = () => {
@@ -134,7 +121,7 @@ const NineDots = useHooks(props => {
     }
 
     const restartGame = () => {
-        const updateCircles = createCircles(circleSet, [])
+        const updateCircles = createCircles(circles, [])
         setCircles(updateCircles)
         setLines([])
         setLength(4)
@@ -150,6 +137,7 @@ const NineDots = useHooks(props => {
 
     return (
         <div className="container" >
+            <h1>Please use {props.pattern.length} straight line(s).</h1>
             <canvas
                 id="canvas"
                 width={700}
