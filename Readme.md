@@ -2,7 +2,6 @@
 
 _This project was generated with [create-empirica-app](https://github.com/empiricaly/create-empirica-app)._
 
-*Add a description of your Empirica app*
 This app is an implementation of the Nine-Dot problem. The game challenges players to connect dots on a canvas using  a continuous straight line given some constraints. Players are given two training rounds to become familiar with the game format, and one main round in which they attempt the nine-dot challenge.
 
 Upon exporting experiment results, the success of players (indicated by  "1"), can be found in the players_rounds.csv file in the data.value column.
